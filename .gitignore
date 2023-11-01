@@ -1,0 +1,12 @@
+data/
+.vscode/
+api/
+batches/
+bge_onnx/
+data/
+duplicates/
+similarity/
+translated/
+venv/
+wsl_venv/
+.env
