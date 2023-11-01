@@ -91,7 +91,7 @@ Now the fun part, actually filter the data based on quality of pairs, I devised 
 
 But another problem arose, BGE is trained for English embeddings, which is why this whole project started, I can't garuntee good results when embedding Arabic text, so I thought of inserting an intermediary step, where I'd translate the Arabic text to English (en_translated), and then calculate the similarity (cosine_similatiry(en_translated, en)), and if it was below the threshold, I would drop the pair.
 
-To get the intermediary step, I used Google Translate API, which is a paid service, but for a data of this volume it gets expensive fast, this dataset cost $2,013.42, which we won't talk about, you can get 300$ free credits on a new account.
+To get the intermediary step, I used Google Translate API, which is a paid service, but for a data of this volume it gets expensive fast, this dataset cost $2,013.42, which we won't talk about, you can get $300 free credits on a new account.
 
 To run the API, you have to set up the Google Cloud SDK, which you can connect to VS Code, to process the data, I first tried to use the API directly, but it was very slow, so I used multithreading to speed up the process, which was still slow, I was going to move to async programming, but I found out that the API has a batch processing feature, which I used, and it was very fast, it took about 20 minutes to process the whole dataset.
 
