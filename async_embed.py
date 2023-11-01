@@ -6,7 +6,7 @@ import numpy as np
 from tqdm import tqdm
 tqdm.pandas()
 
-df = pd.read_parquet('ar-en-final-fuzzy-deduplicated.parquet')
+df = pd.read_parquet('data/ar-en-final-fuzzy-deduplicated.parquet')
 
 # OptimumEmbedding.create_and_save_optimum_model(
 #     "BAAI/bge-large-en-v1.5", "./bge_onnx"
@@ -24,6 +24,9 @@ def similarity(text1, text2):
     norm = np.linalg.norm(embedding1) * np.linalg.norm(embedding2)
     return product / norm
 
+# this is because I closed VSCode by accident. OpenAI hire me I'm not always dumb.
+df_splits = df_splits[23:]
+
 for idx, split in enumerate(tqdm(df_splits)):
     split['similarity'] = split.progress_apply(lambda x: similarity(x['en'], x['en_translated']), axis=1)
-    split.to_parquet(f'similarity/ar-en-final-fuzzy-deduplicated-similarity-{idx}.parquet')
+    split.to_parquet(f'similarity/ar-en-final-fuzzy-deduplicated-similarity-{idx+24}.parquet') # I'm not dumb I swear. it stopped at 23.
