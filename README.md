@@ -1,4 +1,9 @@
 # Finetuning BGE for Arabic Embeddings
+
+## WARNING!
+This repo is a work in progress and I don't mean the model, just the code, it's horrible trust me I know, once I'm done with the dataset, I'll push it to huggingface, and clean up the code.
+Model, same thing.
+
 ## Introduction
 Hi there, this is the first article I ever write, and it will be a combination of documentation, explanation and steps for everything I did with this project. I will try to explain everything in detail.
 ## Dataset Curation
@@ -49,9 +54,10 @@ The dataset has around 1M pairs, which sounds too good to be true, which it was 
 - Duplicated pairs, but this wasn't just duplicated text, it would have some sort of phrase about the date it was retrieved or something similar, which would make it a different pair, but it would be the same text.
 - Bad quality translation, check the example above, especially in religious text.
 
-To deduplicated the data, I used some primitive methods, which I will show below:
+To deduplicated the data, I used some primitive methods, then fuzzy matching, which I will show below:
 
 ```python
+from fuzzywuzzy import fuzz
 df = df[df['ar'] != df['en']]
 duplicates = []
 
@@ -71,7 +77,12 @@ df = df.drop(duplicates)
 
 dedup = df.drop_duplicates(subset=['ar', 'en'])
 
-dedup.to_parquet('ar-en.parquet', index=False)
+def get_similarity_ratio(str1, str2):
+    return fuzz.ratio(str1, str2)
+
+dedup['similarity_ratio'] = dedup.progress_apply(lambda x: get_similarity_ratio(x['en'], x['ar']), axis=1)
+df_deduplicated = df[df['similarity_ratio'] <= 75].drop('similarity_ratio', axis=1)
+df_deduplicated.to_parquet('data/ar-en-final-fuzzy-deduplicated.parquet')
 ```
 
 This took off about 10k examples, which is not a lot, but it's something.
