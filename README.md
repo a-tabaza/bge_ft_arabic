@@ -194,7 +194,7 @@ pairs_200.drop(columns=['tokens_ar'], inplace=True)
 pairs_200.to_parquet('ar-en-200-translated.parquet')
 ```
 
-To filter further, I checked the original English sentences for language since they had a lot of noise, I used the langdetect library, which is a very simple library that detects the language of a text, it's not very accurate, but it's good enough for this task.
+To filter further, I checked the original English sentences for language since they had a lot of noise, I used the langdetect library.
 
 ```python
 from langdetect import detect
